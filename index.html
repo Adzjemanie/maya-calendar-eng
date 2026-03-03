@@ -17,7 +17,7 @@
       width: 100%; box-sizing: border-box;
       border-radius: 12px; border: 1px solid #27344d;
       background: #0f1420; color: #e7eaf0;
-      padding: 10px 12px; font-size: 14px;
+      padding: 10px 12px; font-size: 16px;
     }
     button { cursor: pointer; background: #1a2540; border-color: #2b3a59; }
     button:hover { filter: brightness(1.08); }
@@ -45,7 +45,23 @@
     .tone-bullets { margin: 12px 0 0 20px; color: #cfd6e6; font-size: 15px; line-height: 1.7; max-width: 720px; }
     .tone-bullets li { margin: 6px 0; }
     .smallmono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 12px; color: #b9c2d3; }
-  </style>
+  
+    /* Mobile improvements */
+    @media (max-width: 640px) {
+      .wrap { padding: 16px; }
+      .kv { display: block; }
+      .k { margin-top: 12px; }
+      .v { margin-top: 6px; }
+      details { padding: 12px 12px; }
+      .out { padding: 12px; }
+    }
+    details { overflow: hidden; }
+    .tone-body, .tone-bullets { max-width: 42rem; }
+    .tone-body { word-break: break-word; overflow-wrap: anywhere; }
+    .tone-bullets { overflow-wrap: anywhere; }
+    .explain-wrap { margin-top: 12px; }
+
+</style>
 </head>
 <body>
   <div class="wrap">
@@ -245,21 +261,12 @@
     const hbStr = `${r.hb.day} ${r.hb.month}`;
 
     elOut.innerHTML = `
+
       <div class="big mono">${lcStr}</div>
 
       <div class="kv">
         <div class="k">Tzolk’in</div>
-        <div class="v mono">
-          ${tzStr}
-          <details style="margin-top:12px;" open>
-            <summary>Day tone explanation (tone ${r.tz.number})</summary>
-            ${renderToneDetails(r.tz.number)}
-          </details>
-          <details open>
-            <summary>Day sign explanation (${escapeHtml(r.tz.name)})</summary>
-            ${renderDayDetails(r.tz.name)}
-          </details>
-        </div>
+        <div class="v mono">${tzStr}</div>
 
         <div class="k">Haab’</div><div class="v mono">${hbStr}</div>
         <div class="k">JDN</div><div class="v mono">${r.jdn}</div>
@@ -267,11 +274,24 @@
         <div class="k">Correlation</div><div class="v mono">${correlation}</div>
       </div>
 
+      <div class="explain-wrap">
+        <details open>
+          <summary>Day tone explanation (tone ${r.tz.number})</summary>
+          ${renderToneDetails(r.tz.number)}
+        </details>
+
+        <details open>
+          <summary>Day sign explanation (${escapeHtml(r.tz.name)})</summary>
+          ${renderDayDetails(r.tz.name)}
+        </details>
+      </div>
+
       <div class="hint">
         Quick read: <span class="smallmono">tone</span> = how the day moves • <span class="smallmono">day sign</span> = what the day is about.
       </div>
-    `;
-  }
+
+`;
+}
 
   btnCalc.addEventListener("click", render);
   btnToday.addEventListener("click", () => { setToday(); render(); });
