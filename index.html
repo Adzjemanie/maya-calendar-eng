@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Maya Calendar App — Focus Mode (EN)</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    body { margin: 0; background: #0b0e14; color: #e7eaf0; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 24px; }
+    .card { background: #121826; border: 1px solid #1f2a3d; border-radius: 16px; padding: 18px; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+    h1 { font-size: 22px; margin: 0 0 8px; }
+    p { margin: 8px 0; color: #b9c2d3; }
+
+    label { display: block; font-size: 12px; color: #b9c2d3; margin-bottom: 6px; }
+    input, select, button {
+      width: 100%; box-sizing: border-box;
+      border-radius: 12px; border: 1px solid #27344d;
+      background: #0f1420; color: #e7eaf0;
+      padding: 10px 12px; font-size: 14px;
+    }
+    button { cursor: pointer; background: #1a2540; border-color: #2b3a59; }
+    button:hover { filter: brightness(1.08); }
+
+    .row { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    @media (min-width: 520px) { .row { grid-template-columns: 1fr 1fr; } }
+
+    .out { margin-top: 14px; padding: 14px; border-radius: 14px; background: #0f1420; border: 1px solid #27344d; }
+    .big { font-size: 18px; font-weight: 650; letter-spacing: .2px; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+
+    .kv { display: grid; grid-template-columns: 140px 1fr; gap: 10px; margin-top: 10px; align-items: start; }
+    .k { color: #b9c2d3; font-size: 12px; padding-top: 3px; }
+    .v { font-size: 14px; }
+
+    .hint { font-size: 12px; color: #8fa0bf; margin-top: 10px; line-height: 1.35; }
+    .pill { display:inline-block; padding: 4px 10px; border:1px solid #27344d; border-radius: 999px; background:#0b1020; color:#b9c2d3; font-size: 12px; }
+
+    details { margin-top: 12px; border: 1px solid #27344d; border-radius: 12px; padding: 10px 12px; background: #0b1020; }
+    summary { cursor: pointer; font-size: 13px; color: #d6dcff; user-select: none; }
+    summary::-webkit-details-marker { display:none; }
+
+    .tone-title { margin-top: 10px; font-size: 13px; color: #d6dcff; }
+    .tone-body { margin-top: 12px; color: #cfd6e6; font-size: 15px; line-height: 1.7; max-width: 720px; }
+    .tone-bullets { margin: 12px 0 0 20px; color: #cfd6e6; font-size: 15px; line-height: 1.7; max-width: 720px; }
+    .tone-bullets li { margin: 6px 0; }
+    .smallmono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 12px; color: #b9c2d3; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Maya Calendar App</h1>
+      <p>Focus mode: no extra side panel. Day tone + day sign explanations use the full width for readability. Works offline.</p>
+
+      <div class="row" style="margin-top:14px;">
+        <div>
+          <label for="date">Date</label>
+          <input id="date" type="date" />
+        </div>
+        <div>
+          <label for="corr">Correlation (JDN base)</label>
+          <select id="corr">
+            <option value="584283">GMT (584283)</option>
+            <option value="584285">584285</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:10px;">
+        <div>
+          <label>&nbsp;</label>
+          <button id="calc">Calculate</button>
+        </div>
+        <div>
+          <label>&nbsp;</label>
+          <button id="today">Today</button>
+        </div>
+      </div>
+
+      <div class="out" id="out" aria-live="polite">
+        <div class="big">—</div>
+        <div class="hint">Pick a date and click <span class="pill">Calculate</span>.</div>
+      </div>
+
+      <details>
+        <summary>How to read the Tzolk’in?</summary>
+        <div class="tone-body">
+          The Tzolk’in combines two cycles: a <b>tone</b> (1–13) and a <b>day sign</b> (20).<br>
+          Read it as: <span class="smallmono">tone = how</span> (movement/rhythm) and <span class="smallmono">day sign = what</span> (theme/quality).
+          Together they describe the day’s focus.
+        </div>
+      </details>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const TZOLKIN_NAMES = [
+    "Imix","Ik’","Ak’b’al","K’an","Chikchan","Kimi","Manik’","Lamat","Muluk","Ok",
+    "Chuwen","Eb’","B’en","Ix","Men","K’ib’","Kaban","Etz’nab’","Kawak","Ajaw"
+  ];
+
+  const HAAB_MONTHS = [
+    "Pop","Wo’","Sip","Sotz’","Sek","Xul","Yaxk’in","Mol","Ch’en","Yax",
+    "Sak’","Keh","Mak","K’ank'in","Muwan","Pax","K’ayab","Kumk’u","Wayeb’"
+  ];
+
+  const TZOLKIN_TONES = {
+    1:{name:"Magnetic",short:"Intention • attraction • beginning",body:"Tone 1 sets direction. It’s the spark that makes something visible: where does your attention go, and what do you want to invite in? It helps you choose clearly and feel your true ‘yes’. If you want everything at once, Tone 1 brings you back to the core.",bullets:["Day focus: set one clear intention.","Question: What do I want to attract — and why?","Pitfall: keeping it vague → energy scatters."]},
+    2:{name:"Lunar",short:"Duality • challenge • balance",body:"Tone 2 reveals contrast: me/you, light/shadow, desire/resistance. It’s not a mistake — it’s information. Whatever rubs points to something needing alignment. Tone 2 supports boundaries, choices, and clearer collaboration.",bullets:["Day focus: name the tension without forcing a fix.","Question: Where do I say ‘yes’ while feeling ‘no’?","Pitfall: polarizing (either/or) instead of integrating (both/and)."]},
+    3:{name:"Electric",short:"Activation • movement • first action",body:"Tone 3 puts the plan in motion. Small but real: one step, one message, one start. The point is to let energy move by doing. Action is a catalyst here — not perfection.",bullets:["Day focus: take one concrete step within 30 minutes.","Question: What action makes this come alive?","Pitfall: waiting for certainty before moving."]},
+    4:{name:"Self-Existing",short:"Form • structure • definition",body:"Tone 4 creates the container: what is it, what belongs, what doesn’t? It’s great for planning, organizing, and setting boundaries. You make it buildable — and shareable.",bullets:["Day focus: create a simple structure (list, steps, time block).","Question: What form fits this best?","Pitfall: over-structuring until there’s no room."]},
+    5:{name:"Overtone",short:"Power • focus • radiance",body:"Tone 5 gathers power and applies it. You attract resources: time, help, attention, confidence. This tone acts like a center point — where you are clear, everything else aligns more easily.",bullets:["Day focus: choose one focus point and protect it.","Question: What strengthens this — and what leaks energy?","Pitfall: carrying everything alone instead of asking/delegating."]},
+    6:{name:"Rhythmic",short:"Balance • organization • flow",body:"Tone 6 finds the rhythm that works. Not harder — smarter: pace, repetition, balance. You notice what ‘clicks’ in your day: which habits support you and which disrupt flow.",bullets:["Day focus: build a sustainable rhythm (work/rest).","Question: What stabilizes without stiffening?","Pitfall: optimizing so much that flow disappears."]},
+    7:{name:"Resonant",short:"Attunement • inspiration • listening",body:"Tone 7 is the midline: you tune in. It’s a good day to listen — to signals, synchronicity, body, and silence. Inspiration doesn’t come from pushing, but from receiving.",bullets:["Day focus: a short silence/reflection (5–10 min).","Question: What wants to be heard when I stop filling the space?","Pitfall: overstimulation makes attunement difficult."]},
+    8:{name:"Galactic",short:"Integrity • harmony • example",body:"Tone 8 asks: do you live what you know? Integrity is the key. What you do should match your values. This tone supports harmonizing and ‘straightening’ what feels off.",bullets:["Day focus: make one choice that reflects your values.","Question: Where is there a mismatch between words and actions?","Pitfall: perfectionism disguised as integrity."]},
+    9:{name:"Solar",short:"Deepening • perseverance • dedication",body:"Tone 9 adds depth. You sense the bigger context and what is worth the long breath. It supports refining, finishing, and continuing with patience.",bullets:["Day focus: work on something ‘big’ in small blocks.","Question: What deserves my dedication long-term?","Pitfall: doing too many things → depth turns into pressure."]},
+    10:{name:"Planetary",short:"Manifestation • making it real",body:"Tone 10 makes it tangible: deliver, publish, show it. It’s about reality — what exists now? This tone helps bring things down to earth.",bullets:["Day focus: ship something (even a v1).","Question: How can I make this concrete?","Pitfall: endless polishing keeps it hidden."]},
+    11:{name:"Spectral",short:"Release • liberation • dissolving",body:"Tone 11 clears space. What is stuck can loosen: roles, clutter, beliefs, tasks that no longer fit. Liberation comes from honestly removing what no longer nourishes.",bullets:["Day focus: remove one thing (task/object/commitment) that doesn’t fit anymore.","Question: What holds me for no good reason?","Pitfall: cutting too harshly without sensing what you do want."]},
+    12:{name:"Crystal",short:"Cooperation • sharing • insight",body:"Tone 12 connects. Insights become meaningful through relationship and sharing. Great for collaboration, feedback, community, and assembling pieces into one whole.",bullets:["Day focus: share an insight or ask for feedback.","Question: With whom does this become stronger?","Pitfall: people-pleasing instead of clarity."]},
+    13:{name:"Cosmic",short:"Completion • transcendence • return",body:"Tone 13 completes the cycle — and carries the wisdom forward. What did you learn, what do you take into the next round? Strong for reflection and meaningful closure.",bullets:["Day focus: close something consciously (with a small ‘ending’).","Question: What lesson am I carrying forward?","Pitfall: rushing into the next thing too fast."]}
+  };
+
+  const TZOLKIN_DAYS = {
+    "Imix":{title:"Imix",short:"Primordial water • nourishment • beginnings",body:"Imix carries ‘source’ energy: nourishment, emergence, intuitive impulses. It can be fertile and creative — or chaotic if everything arrives at once.",bullets:["Nourish yourself (body/mind).","Start small: seed → step.","Notice overwhelm; choose one channel."]},
+    "Ik’":{title:"Ik’",short:"Wind • breath • word",body:"Ik’ is breath and communication — the movement of spirit. A day for speaking, writing, clearing the air, and letting ideas flow.",bullets:["Say it simply and honestly.","Breathwork helps you find direction.","Avoid talking to fill space; choose meaning."]},
+    "Ak’b’al":{title:"Ak’b’al",short:"Night • dream • inner space",body:"Ak’b’al relates to the night world: dreams, the unseen, inner rest. Good for reflection, recovery, and receiving subtle signals.",bullets:["Write down dreams/feelings.","Choose quiet over forcing answers.","Work with shadow: what wants to be seen?"]},
+    "K’an":{title:"K’an",short:"Seed • growth • potential",body:"K’an is seed energy: value, ripening, potential. It invites you to choose what you want to grow and to ‘fertilize’ it with attention.",bullets:["Invest in what truly matters.","Pick one growth point for 30 days.","Watch the ‘more is better’ trap."]},
+    "Chikchan":{title:"Chikchan",short:"Life force • body • instinct",body:"Chikchan is serpentine life force: sensation, instinct, embodied truth. Great for choosing from the body and moving energy through vitality.",bullets:["Check-in: what feels alive?","Move to discharge tension.","Avoid impulse without presence."]},
+    "Kimi":{title:"Kimi",short:"Transition • release • stillness",body:"Kimi holds the energy of transition: endings, grieving, transformation. Not drama — honesty: what is finished? What must ‘die’ for new life to emerge?",bullets:["Close loops and finish threads.","Let emotion move without story.","Avoid cynicism; choose gentleness."]},
+    "Manik’":{title:"Manik’",short:"Hand • healing • skill",body:"Manik’ is the hand: doing, crafting, healing, practice. A day to repair something practical or train a skill until it clicks.",bullets:["Make something with your hands.","Heal through small, steady actions.","Avoid ‘fixing’ without listening."]},
+    "Lamat":{title:"Lamat",short:"Star • beauty • abundance",body:"Lamat emphasizes harmony, beauty, and natural abundance. It amplifies what you feed with attention — so intention matters.",bullets:["Feed beauty (space, body, art).","Focus on what you want to grow.","Avoid scattering/pleasing everyone."]},
+    "Muluk":{title:"Muluk",short:"Water • emotion • offering",body:"Muluk is water and emotion: purification, flow, sensitivity. It asks for honest feeling and letting what’s stuck move again.",bullets:["Hydrate / cleanse / let it flow.","Name feelings without judgment.","If overwhelmed, ground first."]},
+    "Ok":{title:"Ok",short:"Dog • loyalty • heart",body:"Ok brings loyalty, friendship, heart ethics. It invites you to feed relationships and make love practical — not just a feeling.",bullets:["Do one loyal, loving action.","Ask: what am I loyal to?","Avoid self-erasure in the name of loyalty."]},
+    "Chuwen":{title:"Chuwen",short:"Monkey • play • creativity",body:"Chuwen is playful creativity: art, humor, experimentation. Great for making, improvising, and learning with curiosity.",bullets:["Create without a goal.","Make a messy first draft (v1).","Avoid staying shallow by turning everything into a joke."]},
+    "Eb’":{title:"Eb’",short:"Path • health • development",body:"Eb’ is the path: daily growth, well-being, learning by steps. Good for routines, recovery, and choosing direction in your life path.",bullets:["Choose one supportive routine.","Take one step on your path.","Avoid comparing — keep your pace."]},
+    "B’en":{title:"B’en",short:"Reed • integrity • leadership",body:"B’en is uprightness and clear leadership (including self-leadership). It’s about dignity, boundaries, and staying on course.",bullets:["Set one clear boundary.","Lead by example, not pressure.","Avoid rigidity (‘my way or nothing’)."]},
+    "Ix":{title:"Ix",short:"Jaguar • mystery • earth magic",body:"Ix connects to earth, mystery, and inner power. A day for respect, intuition, and quiet courage. What you nourish in silence grows strong here.",bullets:["Ground in nature or through breath/body.","Work with intuition/ritual.","Avoid controlling the unknown."]},
+    "Men":{title:"Men",short:"Eagle • vision • perspective",body:"Men offers height and vision: the bigger picture, strategy, future direction. Good for planning with perspective and choosing a path that fits.",bullets:["Zoom out: what’s the essence?","Make one strategic choice.","Avoid living only in the head — include the heart."]},
+    "K’ib’":{title:"K’ib’",short:"Inner fire • reflection • forgiveness",body:"K’ib’ relates to conscience, reflection, and forgiveness. A day to heal by understanding, illuminating, and looking back honestly.",bullets:["Write: what do I want to forgive (me/others)?","Choose simplicity and quiet.","Avoid getting stuck in guilt/self-criticism."]},
+    "Kaban":{title:"Kaban",short:"Earth • timing • evolution",body:"Kaban is the moving earth: growth, change, right timing. It helps you sense what fits now and move with signs and rhythm.",bullets:["Notice synchronicities (stay grounded).","Choose what supports evolution.","If restless, ground—then move."]},
+    "Etz’nab’":{title:"Etz’nab’",short:"Flint • mirror • truth",body:"Etz’nab’ is the mirror and the sharp edge of truth. It cuts through illusion. Great for honesty, clean feedback, and clear decisions.",bullets:["Ask: what is the simple truth?","Communicate cleanly.","Avoid sharpness without compassion."]},
+    "Kawak":{title:"Kawak",short:"Storm • cleansing • breakthrough",body:"Kawak brings storm energy: release, clearing, breakthroughs. It can feel intense, but often resets you into more authenticity.",bullets:["Discharge tension (move, clean, cry).","Make space for a breakthrough.","Avoid feeding drama instead of cleansing."]},
+    "Ajaw":{title:"Ajaw",short:"Sun • awareness • completion",body:"Ajaw is light, awareness, and completion. A day to illuminate: what is essential, what should be seen, what can be closed with dignity?",bullets:["Choose one essence and make it clear.","Celebrate what’s complete; honor growth.","Avoid ego — share light."]}
+  };
+
+  const pad2 = n => String(n).padStart(2, "0");
+  const elDate = document.getElementById("date");
+  const elCorr = document.getElementById("corr");
+  const elOut  = document.getElementById("out");
+  const btnCalc = document.getElementById("calc");
+  const btnToday = document.getElementById("today");
+
+  function gregorianToJDN(y, m, d) {
+    const a = Math.floor((14 - m) / 12);
+    const y2 = y + 4800 - a;
+    const m2 = m + 12 * a - 3;
+    return d + Math.floor((153 * m2 + 2) / 5) + 365 * y2 + Math.floor(y2 / 4)
+      - Math.floor(y2 / 100) + Math.floor(y2 / 400) - 32045;
+  }
+
+  function longCountFromDays(days) {
+    const BAKTUN = 144000, KATUN = 7200, TUN = 360, UINAL = 20;
+    const baktun = Math.floor(days / BAKTUN); days %= BAKTUN;
+    const katun  = Math.floor(days / KATUN);  days %= KATUN;
+    const tun    = Math.floor(days / TUN);    days %= TUN;
+    const uinal  = Math.floor(days / UINAL);  days %= UINAL;
+    const kin    = days;
+    return { baktun, katun, tun, uinal, kin };
+  }
+
+  function tzolkinFromDays(days) {
+    const number = ((days + 3) % 13) + 1;
+    const name = TZOLKIN_NAMES[(days + 19) % 20];
+    return { number, name };
+  }
+
+  function haabFromDays(days) {
+    const haabIndex = (days + 348) % 365;
+    if (haabIndex >= 360) return { day: haabIndex - 360, month: "Wayeb’" };
+    const monthIndex = Math.floor(haabIndex / 20);
+    return { day: haabIndex % 20, month: HAAB_MONTHS[monthIndex] };
+  }
+
+  function modPositive(n, m) { return ((n % m) + m) % m; }
+
+  function computeForDate(dateISO, correlation) {
+    const [yy, mm, dd] = dateISO.split("-").map(Number);
+    const jdn = gregorianToJDN(yy, mm, dd);
+    const daysSinceBase = jdn - correlation;
+    const daysLC = modPositive(daysSinceBase, 1872000 * 20);
+    return {
+      jdn, daysSinceBase,
+      lc: longCountFromDays(daysLC),
+      tz: tzolkinFromDays(modPositive(daysSinceBase, 260)),
+      hb: haabFromDays(modPositive(daysSinceBase, 365))
+    };
+  }
+
+  function setToday() {
+    const now = new Date();
+    elDate.value = `${now.getFullYear()}-${pad2(now.getMonth()+1)}-${pad2(now.getDate())}`;
+  }
+
+  function escapeHtml(s) {
+    return String(s)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function renderToneDetails(n) {
+    const t = TZOLKIN_TONES[n];
+    if (!t) return "";
+    const bullets = t.bullets.map(b => `<li>${escapeHtml(b)}</li>`).join("");
+    return `
+      <div class="tone-title"><b>Tone ${n}: ${escapeHtml(t.name)}</b> <span class="smallmono">(${escapeHtml(t.short)})</span></div>
+      <div class="tone-body">${escapeHtml(t.body)}</div>
+      <ul class="tone-bullets">${bullets}</ul>
+    `;
+  }
+
+  function renderDayDetails(dayName) {
+    const d = TZOLKIN_DAYS[dayName];
+    if (!d) return "";
+    const bullets = d.bullets.map(b => `<li>${escapeHtml(b)}</li>`).join("");
+    return `
+      <div class="tone-title"><b>Day sign: ${escapeHtml(d.title)}</b> <span class="smallmono">(${escapeHtml(d.short)})</span></div>
+      <div class="tone-body">${escapeHtml(d.body)}</div>
+      <ul class="tone-bullets">${bullets}</ul>
+    `;
+  }
+
+  function render() {
+    const iso = elDate.value;
+    if (!iso) return;
+    const correlation = Number(elCorr.value);
+
+    const r = computeForDate(iso, correlation);
+    const lcStr = `${r.lc.baktun}.${r.lc.katun}.${r.lc.tun}.${r.lc.uinal}.${r.lc.kin}`;
+    const tzStr = `${r.tz.number} ${r.tz.name}`;
+    const hbStr = `${r.hb.day} ${r.hb.month}`;
+
+    elOut.innerHTML = `
+      <div class="big mono">${lcStr}</div>
+
+      <div class="kv">
+        <div class="k">Tzolk’in</div>
+        <div class="v mono">
+          ${tzStr}
+          <details style="margin-top:12px;" open>
+            <summary>Day tone explanation (tone ${r.tz.number})</summary>
+            ${renderToneDetails(r.tz.number)}
+          </details>
+          <details open>
+            <summary>Day sign explanation (${escapeHtml(r.tz.name)})</summary>
+            ${renderDayDetails(r.tz.name)}
+          </details>
+        </div>
+
+        <div class="k">Haab’</div><div class="v mono">${hbStr}</div>
+        <div class="k">JDN</div><div class="v mono">${r.jdn}</div>
+        <div class="k">Δ days</div><div class="v mono">${r.daysSinceBase}</div>
+        <div class="k">Correlation</div><div class="v mono">${correlation}</div>
+      </div>
+
+      <div class="hint">
+        Quick read: <span class="smallmono">tone</span> = how the day moves • <span class="smallmono">day sign</span> = what the day is about.
+      </div>
+    `;
+  }
+
+  btnCalc.addEventListener("click", render);
+  btnToday.addEventListener("click", () => { setToday(); render(); });
+  elCorr.addEventListener("change", render);
+
+  setToday();
+  render();
+})();
+</script>
+</body>
+</html>
