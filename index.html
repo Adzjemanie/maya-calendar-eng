@@ -41,8 +41,8 @@
     summary::-webkit-details-marker { display:none; }
 
     .tone-title { margin-top: 10px; font-size: 13px; color: #d6dcff; }
-    .tone-body { margin-top: 12px; color: #cfd6e6; font-size: 15px; line-height: 1.7; max-width: 720px; }
-    .tone-bullets { margin: 12px 0 0 20px; color: #cfd6e6; font-size: 15px; line-height: 1.7; max-width: 720px; }
+    .tone-body{margin-top:14px;color:#d7deef;font-size:16px;line-height:1.8;max-width:44rem;letter-spacing:0.2px;}
+    .tone-bullets{margin:14px 0 0 22px;color:#d7deef;font-size:16px;line-height:1.8;max-width:44rem;}
     .tone-bullets li { margin: 6px 0; }
     .smallmono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 12px; color: #b9c2d3; }
   
@@ -56,9 +56,9 @@
       .out { padding: 12px; }
     }
     details { overflow: hidden; }
-    .tone-body, .tone-bullets { max-width: 42rem; }
-    .tone-body { word-break: break-word; overflow-wrap: anywhere; }
-    .tone-bullets { overflow-wrap: anywhere; }
+    .tone-body, .tone-bullets{margin:14px 0 0 22px;color:#d7deef;font-size:16px;line-height:1.8;max-width:44rem;}
+    .tone-body{margin-top:14px;color:#d7deef;font-size:16px;line-height:1.8;max-width:44rem;letter-spacing:0.2px;}
+    .tone-bullets{margin:14px 0 0 22px;color:#d7deef;font-size:16px;line-height:1.8;max-width:44rem;}
     .explain-wrap { margin-top: 12px; }
 
 </style>
@@ -269,10 +269,7 @@
         <div class="v mono">${tzStr}</div>
 
         <div class="k">Haab’</div><div class="v mono">${hbStr}</div>
-        <div class="k">JDN</div><div class="v mono">${r.jdn}</div>
-        <div class="k">Δ days</div><div class="v mono">${r.daysSinceBase}</div>
-        <div class="k">Correlation</div><div class="v mono">${correlation}</div>
-      </div>
+        </div>
 
       <div class="explain-wrap">
         <details open>
