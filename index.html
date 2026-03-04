@@ -64,29 +64,34 @@
       <h1>Maya Calendar</h1>
       <p>Daily messages follow the Tzolk’in: <b>13 tones</b> × <b>20 day signs</b> = <b>260</b> unique days.</p>
 
-      <div class="grid">
-        <div>
-          <label for="date">Date</label>
-          <input id="date" type="date" />
-          <div class="btnRow">
-            <button id="calc">Calculate</button>
-            <button id="today">Today</button>
-          </div>
-        </div>
-
-        <div>
-          <label for="birthdate">Find your Maya birthday</label>
-          <input id="birthdate" type="date" />
-          <div class="btnRow">
-            <button id="birthBtn">Find my Mayan sign</button>
-            <button id="birthClear">Clear</button>
-          </div>
-        </div>
-      </div>
-
+      <!-- 1) Daily message -->
       <div class="out" id="dailyBox" aria-live="polite">
         <div class="title">Daily Message</div>
         <div id="dailyMsg"></div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <!-- 2) Date -->
+      <label for="date">Date</label>
+      <input id="date" type="date" />
+      <div class="btnRow">
+        <button id="calc">Calculate</button>
+        <button id="today">Today</button>
+      </div>
+
+      <div class="spacer"></div>
+
+      <!-- 3) Maya birthdate -->
+      <label for="birthdate">Maya birthdate</label>
+      <input id="birthdate" type="date" />
+
+      <div class="spacer"></div>
+
+      <!-- 4) Find your Maya Birthday -->
+      <div class="btnRow">
+        <button id="birthBtn">Find your Maya Birthday</button>
+        <button id="birthClear">Clear</button>
       </div>
 
       <div class="out" id="birthBox" aria-live="polite" style="display:none;">
@@ -94,61 +99,8 @@
         <div id="birthMsg"></div>
       </div>
 
-      <details>
-        <summary>Maya Time Cycles</summary>
-        <div class="msgBody">
-          <b>Tzolk’in (260 days)</b><br>
-          The Tzolk’in combines a <span class="smallmono">tone (1–13)</span> and a <span class="smallmono">day sign (20)</span> to create 260 unique days.<br><br>
-          <b>Haab’ (365 days)</b><br>
-          The Haab’ is the solar calendar: 18 months of 20 days plus 5 transitional days called <span class="smallmono">Wayeb’</span>.<br><br>
-          <b>Long Count</b><br>
-          Written as <span class="smallmono">baktun.katun.tun.uinal.kin</span> to count days over long periods.
-        </div>
-      </details>
-
-      <details>
-        <summary>Reference: the 13 Tones</summary>
-        <div class='tone-line'><b>1</b> <span class='muted'>—</span> Magnetic — Intention • Beginning.</div>
-<div class='tone-line'><b>2</b> <span class='muted'>—</span> Lunar — Choice • Balance.</div>
-<div class='tone-line'><b>3</b> <span class='muted'>—</span> Electric — Activation • Movement.</div>
-<div class='tone-line'><b>4</b> <span class='muted'>—</span> Self‑Existing — Structure • Form.</div>
-<div class='tone-line'><b>5</b> <span class='muted'>—</span> Overtone — Power • Focus.</div>
-<div class='tone-line'><b>6</b> <span class='muted'>—</span> Rhythmic — Flow • Balance.</div>
-<div class='tone-line'><b>7</b> <span class='muted'>—</span> Resonant — Attunement • Listening.</div>
-<div class='tone-line'><b>8</b> <span class='muted'>—</span> Galactic — Integrity • Harmony.</div>
-<div class='tone-line'><b>9</b> <span class='muted'>—</span> Solar — Depth • Perseverance.</div>
-<div class='tone-line'><b>10</b> <span class='muted'>—</span> Planetary — Manifestation • Realization.</div>
-<div class='tone-line'><b>11</b> <span class='muted'>—</span> Spectral — Release • Clearing.</div>
-<div class='tone-line'><b>12</b> <span class='muted'>—</span> Crystal — Cooperation • Sharing.</div>
-<div class='tone-line'><b>13</b> <span class='muted'>—</span> Cosmic — Completion • Integration.</div>
-      </details>
-
-      <details>
-        <summary>Reference: the 20 Day Signs</summary>
-        <div class='tone-line'><b>Imix</b> <span class='muted'>—</span> Beginnings • Nourishment.</div>
-<div class='tone-line'><b>Ik’</b> <span class='muted'>—</span> Breath • Communication.</div>
-<div class='tone-line'><b>Ak’b’al</b> <span class='muted'>—</span> Dream • Inner World.</div>
-<div class='tone-line'><b>K’an</b> <span class='muted'>—</span> Seed • Potential.</div>
-<div class='tone-line'><b>Chikchan</b> <span class='muted'>—</span> Life Force • Instinct.</div>
-<div class='tone-line'><b>Kimi</b> <span class='muted'>—</span> Transition • Release.</div>
-<div class='tone-line'><b>Manik’</b> <span class='muted'>—</span> Healing • Skill.</div>
-<div class='tone-line'><b>Lamat</b> <span class='muted'>—</span> Beauty • Abundance.</div>
-<div class='tone-line'><b>Muluk</b> <span class='muted'>—</span> Emotion • Flow.</div>
-<div class='tone-line'><b>Ok</b> <span class='muted'>—</span> Heart • Loyalty.</div>
-<div class='tone-line'><b>Chuwen</b> <span class='muted'>—</span> Play • Creativity.</div>
-<div class='tone-line'><b>Eb’</b> <span class='muted'>—</span> Path • Wellbeing.</div>
-<div class='tone-line'><b>B’en</b> <span class='muted'>—</span> Dignity • Boundaries.</div>
-<div class='tone-line'><b>Ix</b> <span class='muted'>—</span> Earth • Mystery.</div>
-<div class='tone-line'><b>Men</b> <span class='muted'>—</span> Vision • Perspective.</div>
-<div class='tone-line'><b>K’ib’</b> <span class='muted'>—</span> Forgiveness • Reflection.</div>
-<div class='tone-line'><b>Kaban</b> <span class='muted'>—</span> Timing • Evolution.</div>
-<div class='tone-line'><b>Etz’nab’</b> <span class='muted'>—</span> Truth • Mirror.</div>
-<div class='tone-line'><b>Kawak</b> <span class='muted'>—</span> Cleansing • Renewal.</div>
-<div class='tone-line'><b>Ajaw</b> <span class='muted'>—</span> Light • Awareness.</div>
-      </details>
-
       <div class="hint">All 260 messages are embedded in this single file for offline use.</div>
-    </div>
+</div>
   </div>
 
 <script>
