@@ -1,68 +1,42 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Maya Calendar</title>
-
-<style>
-:root{
-  --bg:#0b0e14;
-  --card:#121a2b;
-  --border:#223155;
-  --panel:#0f1830;
-  --panelBorder:#2a3c66;
-  --text:#e7eeff;
-  --muted:#b1c2ea;
-  --hint:#8ea4d8;
-  --accent:#87a7ff;
-  --explain:#d9e4ff;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-}
-body{
-  background:var(--bg);
-  color:var(--text);
-  margin:0;
-  padding:16px;
-}
-.container{max-width:900px;margin:auto;}
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:18px;
-  margin-bottom:16px;
-}
-.big{font-size:22px;font-weight:650;margin-bottom:10px;}
-.tone-body{margin-top:12px;line-height:1.75;color:var(--explain);font-size:16px;max-width:44rem;}
-.smallmono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);font-size:12px;}
-label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;}
-input,button{
-  font-size:16px;
-  padding:10px 12px;
-  border-radius:12px;
-  border:1px solid var(--panelBorder);
-  background:var(--panel);
-  color:var(--text);
-  width:100%;
-  box-sizing:border-box;
-}
-button{cursor:pointer;}
-button:hover{filter:brightness(1.08);}
-.btnRow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
-.out{margin-top:14px;padding:14px;border:1px solid var(--panelBorder);border-radius:14px;background:var(--panel);}
-details{margin-top:12px;border:1px solid var(--panelBorder);border-radius:12px;padding:10px 12px;background:#0b1020;}
-summary{cursor:pointer;color:var(--accent);font-size:13px;user-select:none;}
-summary::-webkit-details-marker{display:none;}
-.hint{font-size:12px;color:var(--hint);margin-top:10px;line-height:1.35;}
-@media (max-width:640px) {
-  body{padding:12px;}
-  .card{padding:16px;}
-  .btnRow{grid-template-columns:1fr;}
-}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Maya Calendar</title>
+  <style>
+    :root{
+      --bg:#0b0e14;
+      --card:#121a2b;
+      --border:#223155;
+      --panel:#0f1830;
+      --panelBorder:#2a3c66;
+      --text:#e7eeff;
+      --muted:#b1c2ea;
+      --hint:#8ea4d8;
+      --accent:#87a7ff;
+      --explain:#d9e4ff;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+    }
+    body{background:var(--bg);color:var(--text);margin:0;padding:16px;}
+    .container{max-width:900px;margin:auto;}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:16px;}
+    .big{font-size:22px;font-weight:650;margin:0 0 10px;}
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;}
+    input,button{width:100%;box-sizing:border-box;font-size:16px;padding:10px 12px;border-radius:12px;border:1px solid var(--panelBorder);background:var(--panel);color:var(--text);}
+    button{cursor:pointer;}
+    button:hover{filter:brightness(1.08);}
+    .btnRow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+    @media (max-width:640px){ .btnRow{grid-template-columns:1fr;} }
+    .out{margin-top:14px;padding:14px;border-radius:14px;background:var(--panel);border:1px solid var(--panelBorder);}
+    .tone-body{margin-top:12px;line-height:1.75;color:var(--explain);font-size:16px;max-width:44rem;}
+    .smallmono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);font-size:12px;}
+    details{margin-top:12px;border:1px solid var(--panelBorder);border-radius:12px;padding:10px 12px;background:#0b1020;}
+    summary{cursor:pointer;color:var(--accent);font-size:13px;user-select:none;}
+    summary::-webkit-details-marker{display:none;}
+    .hint{font-size:12px;color:var(--hint);margin-top:10px;line-height:1.35;}
+  </style>
 </head>
-
 <body>
 <div class="container">
 
@@ -78,134 +52,103 @@ summary::-webkit-details-marker{display:none;}
     </div>
 
     <div class="out" id="daily" aria-live="polite"></div>
+    <div class="hint">Daily Message combines the day’s <span class="smallmono">tone</span> (1–13) with its <span class="smallmono">day sign</span> (20).</div>
   </div>
 
   <div class="card">
     <div class="big">Maya Time Cycles</div>
 
-    <div class="tone-body">
-      <b>Tzolk’in (260 days)</b><br>
-      The Tzolk’in is a sacred cycle of 260 days. Each day combines a
-      <span class="smallmono">tone (1–13)</span> and a
-      <span class="smallmono">day sign (20)</span>.
-      Together they create 260 unique day combinations.
+    <div class="tone-body"><b>Tzolk’in (260 days)</b><br>
+      The Tzolk’in combines two cycles: a <span class="smallmono">tone (1–13)</span> and a <span class="smallmono">day sign (20)</span>. Together they create 260 unique days.
     </div>
 
-    <div class="tone-body">
-      <b>Haab’ (365 days)</b><br>
-      The Haab’ is the Maya solar calendar of 365 days.
-      It consists of 18 months of 20 days plus 5 additional days called
-      <span class="smallmono">Wayeb’</span>, a transitional period between years.
+    <div class="tone-body"><b>Haab’ (365 days)</b><br>
+      The Haab’ is the solar calendar: 18 months of 20 days plus 5 transitional days called <span class="smallmono">Wayeb’</span>.
     </div>
 
-    <div class="tone-body">
-      <b>Long Count</b><br>
-      The Long Count records the number of days since the Maya creation date.
-      Dates are written as:
-      <span class="smallmono">baktun.katun.tun.uinal.kin</span>.
-    </div>
-
-    <div class="tone-body">
-      <b>Katun</b><br>
-      A katun is a period of <span class="smallmono">7,200 days</span>
-      (about 20 years). Katuns are named after the Tzolk’in day
-      <span class="smallmono">Ajaw</span> on which the katun ends.
-    </div>
-
-    <div class="tone-body">
-      <b>Baktun</b><br>
-      A baktun consists of <span class="smallmono">20 katun</span>
-      (144,000 days), which is about 394 years.
+    <div class="tone-body"><b>Long Count</b><br>
+      The Long Count is written as <span class="smallmono">baktun.katun.tun.uinal.kin</span> to count days over long periods.
     </div>
 
     <details>
       <summary>Reference: the 13 Tones</summary>
-      <div class='tone-body'><b>1 — Magnetic</b><br><span class='smallmono'>Intention, attraction, beginning.</span> Set a clear intention and let it guide your focus.</div>
-<div class='tone-body'><b>2 — Lunar</b><br><span class='smallmono'>Duality, challenge, balance.</span> Notice contrasts; choose balance over reaction.</div>
-<div class='tone-body'><b>3 — Electric</b><br><span class='smallmono'>Activation, movement, first action.</span> Take a small real step to create momentum.</div>
-<div class='tone-body'><b>4 — Self-Existing</b><br><span class='smallmono'>Form, structure, definition.</span> Create boundaries and a simple plan.</div>
-<div class='tone-body'><b>5 — Overtone</b><br><span class='smallmono'>Power, focus, empowerment.</span> Gather energy and commit to one priority.</div>
-<div class='tone-body'><b>6 — Rhythmic</b><br><span class='smallmono'>Balance, organization, flow.</span> Find a sustainable rhythm—work, then rest.</div>
-<div class='tone-body'><b>7 — Resonant</b><br><span class='smallmono'>Attunement, listening, inspiration.</span> Pause and tune in; let insight arrive.</div>
-<div class='tone-body'><b>8 — Galactic</b><br><span class='smallmono'>Integrity, harmony, alignment.</span> Align actions with values; refine what’s off.</div>
-<div class='tone-body'><b>9 — Solar</b><br><span class='smallmono'>Deepening, perseverance, dedication.</span> Go deeper instead of wider; stay with what matters.</div>
-<div class='tone-body'><b>10 — Planetary</b><br><span class='smallmono'>Manifestation, realization.</span> Make it tangible—finish or share a version.</div>
-<div class='tone-body'><b>11 — Spectral</b><br><span class='smallmono'>Release, liberation, clearing.</span> Let go of what no longer fits; create space.</div>
-<div class='tone-body'><b>12 — Crystal</b><br><span class='smallmono'>Cooperation, sharing, connection.</span> Strengthen through collaboration and feedback.</div>
-<div class='tone-body'><b>13 — Cosmic</b><br><span class='smallmono'>Completion, integration, transcendence.</span> Close the cycle and harvest the lesson.</div>
+      <div class='tone-body'><b>1 — Magnetic</b> — intention and beginning.</div>
+<div class='tone-body'><b>2 — Lunar</b> — duality and balance.</div>
+<div class='tone-body'><b>3 — Electric</b> — activation and movement.</div>
+<div class='tone-body'><b>4 — Self-Existing</b> — structure and definition.</div>
+<div class='tone-body'><b>5 — Overtone</b> — empowerment and focus.</div>
+<div class='tone-body'><b>6 — Rhythmic</b> — balance and organization.</div>
+<div class='tone-body'><b>7 — Resonant</b> — attunement and reflection.</div>
+<div class='tone-body'><b>8 — Galactic</b> — integrity and harmony.</div>
+<div class='tone-body'><b>9 — Solar</b> — perseverance and depth.</div>
+<div class='tone-body'><b>10 — Planetary</b> — manifestation and realization.</div>
+<div class='tone-body'><b>11 — Spectral</b> — release and liberation.</div>
+<div class='tone-body'><b>12 — Crystal</b> — cooperation and sharing.</div>
+<div class='tone-body'><b>13 — Cosmic</b> — completion and integration.</div>
     </details>
 
     <details>
       <summary>Reference: the 20 Day Signs</summary>
-      <div class='tone-body'><b>Imix</b><br><span class='smallmono'>Beginnings, nourishment, creative potential.</span> Nurture a new seed—start gently, keep it simple.</div>
-<div class='tone-body'><b>Ik’</b><br><span class='smallmono'>Breath, spirit, communication.</span> Speak clearly; breathe first, then say what matters.</div>
-<div class='tone-body'><b>Ak’b’al</b><br><span class='smallmono'>Night, dreams, inner world.</span> Listen inward; give space to dreams and intuition.</div>
-<div class='tone-body'><b>K’an</b><br><span class='smallmono'>Seed, growth, value, abundance.</span> Choose what to grow—invest attention where it counts.</div>
-<div class='tone-body'><b>Chikchan</b><br><span class='smallmono'>Life force, instinct, vitality.</span> Trust the body’s signal; move energy through motion.</div>
-<div class='tone-body'><b>Kimi</b><br><span class='smallmono'>Transformation, endings, renewal.</span> Close a loop; release what’s finished with respect.</div>
-<div class='tone-body'><b>Manik’</b><br><span class='smallmono'>Healing, skill, the sacred hand.</span> Practice and repair; healing comes through steady action.</div>
-<div class='tone-body'><b>Lamat</b><br><span class='smallmono'>Beauty, harmony, abundance.</span> Feed beauty; what you focus on multiplies.</div>
-<div class='tone-body'><b>Muluk</b><br><span class='smallmono'>Water, emotion, flow.</span> Let feelings move; cleanse without overthinking.</div>
-<div class='tone-body'><b>Ok</b><br><span class='smallmono'>Loyalty, companionship, heart.</span> Choose loyal love—with boundaries that protect you too.</div>
-<div class='tone-body'><b>Chuwen</b><br><span class='smallmono'>Play, creativity, artistry.</span> Create a playful first draft; experiment without pressure.</div>
-<div class='tone-body'><b>Eb’</b><br><span class='smallmono'>Path, wellbeing, development.</span> Take one step on your path—small, consistent, real.</div>
-<div class='tone-body'><b>B’en</b><br><span class='smallmono'>Leadership, dignity, boundaries.</span> Stand upright; lead yourself with a clean boundary.</div>
-<div class='tone-body'><b>Ix</b><br><span class='smallmono'>Earth wisdom, intuition, mystery.</span> Ground and trust subtle knowing; move quietly but surely.</div>
-<div class='tone-body'><b>Men</b><br><span class='smallmono'>Vision, higher perspective, insight.</span> Zoom out; choose direction from the bigger picture.</div>
-<div class='tone-body'><b>K’ib’</b><br><span class='smallmono'>Forgiveness, reflection, purification.</span> Reflect and soften; forgiveness frees energy.</div>
-<div class='tone-body'><b>Kaban</b><br><span class='smallmono'>Evolution, timing, learning.</span> Adjust to right timing; choose what supports growth.</div>
-<div class='tone-body'><b>Etz’nab’</b><br><span class='smallmono'>Truth, mirror, clarity.</span> Name the simple truth kindly; cut through confusion.</div>
-<div class='tone-body'><b>Kawak</b><br><span class='smallmono'>Storm, cleansing, renewal.</span> Clear what’s stuck; make space for a breakthrough.</div>
-<div class='tone-body'><b>Ajaw</b><br><span class='smallmono'>Sun, illumination, awareness.</span> Bring clarity; illuminate what matters and complete a step.</div>
+      <div class='tone-body'><b>Imix</b> — beginnings and nourishment.</div>
+<div class='tone-body'><b>Ik’</b> — breath and communication.</div>
+<div class='tone-body'><b>Ak’b’al</b> — dreams and inner world.</div>
+<div class='tone-body'><b>K’an</b> — seed and potential.</div>
+<div class='tone-body'><b>Chikchan</b> — life force and instinct.</div>
+<div class='tone-body'><b>Kimi</b> — transformation and endings.</div>
+<div class='tone-body'><b>Manik’</b> — healing and skill.</div>
+<div class='tone-body'><b>Lamat</b> — beauty and abundance.</div>
+<div class='tone-body'><b>Muluk</b> — water and emotion.</div>
+<div class='tone-body'><b>Ok</b> — loyalty and heart.</div>
+<div class='tone-body'><b>Chuwen</b> — creativity and play.</div>
+<div class='tone-body'><b>Eb’</b> — the human path.</div>
+<div class='tone-body'><b>B’en</b> — leadership and growth.</div>
+<div class='tone-body'><b>Ix</b> — earth wisdom and intuition.</div>
+<div class='tone-body'><b>Men</b> — vision and perspective.</div>
+<div class='tone-body'><b>K’ib’</b> — forgiveness and reflection.</div>
+<div class='tone-body'><b>Kaban</b> — evolution and movement.</div>
+<div class='tone-body'><b>Etz’nab’</b> — truth and clarity.</div>
+<div class='tone-body'><b>Kawak</b> — storm and renewal.</div>
+<div class='tone-body'><b>Ajaw</b> — sun and illumination.</div>
     </details>
   </div>
 
 </div>
 
 <script>
-const daySigns=[
-"Imix","Ik’","Ak’b’al","K’an","Chikchan","Kimi","Manik’","Lamat","Muluk","Ok",
-"Chuwen","Eb’","B’en","Ix","Men","K’ib’","Kaban","Etz’nab’","Kawak","Ajaw"
-];
-
-const TONES = {"1": {"name": "Magnetic", "desc": "Intention, attraction, beginning.", "advice": "Set a clear intention and let it guide your focus."}, "2": {"name": "Lunar", "desc": "Duality, challenge, balance.", "advice": "Notice contrasts; choose balance over reaction."}, "3": {"name": "Electric", "desc": "Activation, movement, first action.", "advice": "Take a small real step to create momentum."}, "4": {"name": "Self-Existing", "desc": "Form, structure, definition.", "advice": "Create boundaries and a simple plan."}, "5": {"name": "Overtone", "desc": "Power, focus, empowerment.", "advice": "Gather energy and commit to one priority."}, "6": {"name": "Rhythmic", "desc": "Balance, organization, flow.", "advice": "Find a sustainable rhythm—work, then rest."}, "7": {"name": "Resonant", "desc": "Attunement, listening, inspiration.", "advice": "Pause and tune in; let insight arrive."}, "8": {"name": "Galactic", "desc": "Integrity, harmony, alignment.", "advice": "Align actions with values; refine what’s off."}, "9": {"name": "Solar", "desc": "Deepening, perseverance, dedication.", "advice": "Go deeper instead of wider; stay with what matters."}, "10": {"name": "Planetary", "desc": "Manifestation, realization.", "advice": "Make it tangible—finish or share a version."}, "11": {"name": "Spectral", "desc": "Release, liberation, clearing.", "advice": "Let go of what no longer fits; create space."}, "12": {"name": "Crystal", "desc": "Cooperation, sharing, connection.", "advice": "Strengthen through collaboration and feedback."}, "13": {"name": "Cosmic", "desc": "Completion, integration, transcendence.", "advice": "Close the cycle and harvest the lesson."}};
-const DAYS  = {"Imix": {"desc": "Beginnings, nourishment, creative potential.", "advice": "Nurture a new seed—start gently, keep it simple."}, "Ik’": {"desc": "Breath, spirit, communication.", "advice": "Speak clearly; breathe first, then say what matters."}, "Ak’b’al": {"desc": "Night, dreams, inner world.", "advice": "Listen inward; give space to dreams and intuition."}, "K’an": {"desc": "Seed, growth, value, abundance.", "advice": "Choose what to grow—invest attention where it counts."}, "Chikchan": {"desc": "Life force, instinct, vitality.", "advice": "Trust the body’s signal; move energy through motion."}, "Kimi": {"desc": "Transformation, endings, renewal.", "advice": "Close a loop; release what’s finished with respect."}, "Manik’": {"desc": "Healing, skill, the sacred hand.", "advice": "Practice and repair; healing comes through steady action."}, "Lamat": {"desc": "Beauty, harmony, abundance.", "advice": "Feed beauty; what you focus on multiplies."}, "Muluk": {"desc": "Water, emotion, flow.", "advice": "Let feelings move; cleanse without overthinking."}, "Ok": {"desc": "Loyalty, companionship, heart.", "advice": "Choose loyal love—with boundaries that protect you too."}, "Chuwen": {"desc": "Play, creativity, artistry.", "advice": "Create a playful first draft; experiment without pressure."}, "Eb’": {"desc": "Path, wellbeing, development.", "advice": "Take one step on your path—small, consistent, real."}, "B’en": {"desc": "Leadership, dignity, boundaries.", "advice": "Stand upright; lead yourself with a clean boundary."}, "Ix": {"desc": "Earth wisdom, intuition, mystery.", "advice": "Ground and trust subtle knowing; move quietly but surely."}, "Men": {"desc": "Vision, higher perspective, insight.", "advice": "Zoom out; choose direction from the bigger picture."}, "K’ib’": {"desc": "Forgiveness, reflection, purification.", "advice": "Reflect and soften; forgiveness frees energy."}, "Kaban": {"desc": "Evolution, timing, learning.", "advice": "Adjust to right timing; choose what supports growth."}, "Etz’nab’": {"desc": "Truth, mirror, clarity.", "advice": "Name the simple truth kindly; cut through confusion."}, "Kawak": {"desc": "Storm, cleansing, renewal.", "advice": "Clear what’s stuck; make space for a breakthrough."}, "Ajaw": {"desc": "Sun, illumination, awareness.", "advice": "Bring clarity; illuminate what matters and complete a step."}};
+const daySigns = ["Imix", "Ik’", "Ak’b’al", "K’an", "Chikchan", "Kimi", "Manik’", "Lamat", "Muluk", "Ok", "Chuwen", "Eb’", "B’en", "Ix", "Men", "K’ib’", "Kaban", "Etz’nab’", "Kawak", "Ajaw"];
+const TONES = {"1": {"name": "Magnetic", "meaning": "intention and beginning", "msg": "Set a clear intention and let it guide your focus."}, "2": {"name": "Lunar", "meaning": "duality and balance", "msg": "Notice contrasts; choose balance over reaction."}, "3": {"name": "Electric", "meaning": "activation and movement", "msg": "Take a small real step to create momentum."}, "4": {"name": "Self-Existing", "meaning": "structure and definition", "msg": "Create boundaries and a simple plan."}, "5": {"name": "Overtone", "meaning": "empowerment and focus", "msg": "Gather energy and commit to one priority."}, "6": {"name": "Rhythmic", "meaning": "balance and organization", "msg": "Find a sustainable rhythm—work, then rest."}, "7": {"name": "Resonant", "meaning": "attunement and reflection", "msg": "Pause and tune in; let insight arrive."}, "8": {"name": "Galactic", "meaning": "integrity and harmony", "msg": "Align actions with values; refine what’s off."}, "9": {"name": "Solar", "meaning": "perseverance and depth", "msg": "Go deeper instead of wider; stay with what matters."}, "10": {"name": "Planetary", "meaning": "manifestation and realization", "msg": "Make it tangible—finish or share a version."}, "11": {"name": "Spectral", "meaning": "release and liberation", "msg": "Let go of what no longer fits; create space."}, "12": {"name": "Crystal", "meaning": "cooperation and sharing", "msg": "Connect and share; insight grows in community."}, "13": {"name": "Cosmic", "meaning": "completion and integration", "msg": "Close the cycle and harvest the lesson."}};
+const DAYS  = {"Imix": {"meaning": "beginnings and nourishment", "msg": "Nurture a new seed—start gently and keep it simple."}, "Ik’": {"meaning": "breath and communication", "msg": "Breathe first, then speak what matters with clarity."}, "Ak’b’al": {"meaning": "dreams and inner world", "msg": "Listen inward; give space to dreams and intuition."}, "K’an": {"meaning": "seed and potential", "msg": "Choose what to grow; invest attention where it counts."}, "Chikchan": {"meaning": "life force and instinct", "msg": "Trust body signals; move energy through motion."}, "Kimi": {"meaning": "transformation and endings", "msg": "Close a loop; release what’s finished with respect."}, "Manik’": {"meaning": "healing and skill", "msg": "Practice and repair; healing comes through steady action."}, "Lamat": {"meaning": "beauty and abundance", "msg": "Feed beauty; what you focus on multiplies."}, "Muluk": {"meaning": "water and emotion", "msg": "Let feelings move; cleanse without overthinking."}, "Ok": {"meaning": "loyalty and heart", "msg": "Choose loyal love—with boundaries that protect you too."}, "Chuwen": {"meaning": "creativity and play", "msg": "Experiment; make a playful first draft without pressure."}, "Eb’": {"meaning": "the human path", "msg": "Take one small, real step forward on your path."}, "B’en": {"meaning": "leadership and growth", "msg": "Stand upright; lead yourself with a clean boundary."}, "Ix": {"meaning": "earth wisdom and intuition", "msg": "Ground and trust subtle knowing; move quietly but surely."}, "Men": {"meaning": "vision and perspective", "msg": "Zoom out; choose direction from the bigger picture."}, "K’ib’": {"meaning": "forgiveness and reflection", "msg": "Reflect and soften; forgiveness frees energy."}, "Kaban": {"meaning": "evolution and movement", "msg": "Adjust timing; choose what supports growth."}, "Etz’nab’": {"meaning": "truth and clarity", "msg": "Name the simple truth kindly; cut through confusion."}, "Kawak": {"meaning": "storm and renewal", "msg": "Clear what’s stuck; make space for a breakthrough."}, "Ajaw": {"meaning": "sun and illumination", "msg": "Bring clarity; illuminate what matters and complete a step."}};
 
 function gregorianToJDN(y,m,d){
-  let a=Math.floor((14-m)/12);
-  let y2=y+4800-a;
-  let m2=m+12*a-3;
+  const a=Math.floor((14-m)/12);
+  const y2=y+4800-a;
+  const m2=m+12*a-3;
   return d+Math.floor((153*m2+2)/5)+365*y2+Math.floor(y2/4)-Math.floor(y2/100)+Math.floor(y2/400)-32045;
 }
 
 function calc(){
-  let iso=document.getElementById("date").value;
+  const iso=document.getElementById("date").value;
   if(!iso) return;
 
-  let [y,m,d]=iso.split("-").map(Number);
-  let jdn=gregorianToJDN(y,m,d);
-  let correlation=584283;
-  let days=jdn-correlation;
+  const [y,m,d]=iso.split("-").map(Number);
+  const jdn=gregorianToJDN(y,m,d);
+  const correlation=584283;
+  const daysSince=jdn-correlation;
 
-  let tone=((days+3)%13)+1;
-  let sign=daySigns[(days+19)%20];
+  const tone=((daysSince+3)%13)+1;
+  const sign=daySigns[(daysSince+19)%20];
 
-  const t = TONES[tone];
-  const s = DAYS[sign];
+  const t=TONES[tone];
+  const s=DAYS[sign];
 
-  // Better daily message: theme + interpretation + reflection + practice
-  const theme = `${t.name} • ${sign}`;
-  const interpretation = `Tone <b>${tone}</b> brings <b>${t.desc.split(",")[0].lower()}</b> energy, expressed through <b>${sign}</b> (${
-      s.desc.split(",")[0].lower()
-  }).`;
+  const meaning = `Tone <b>${tone}</b> (<span class="smallmono">${t.name}</span>) brings <b>${t.meaning}</b>, expressed through <b>${sign}</b> (<span class="smallmono">${s.meaning}</span>).`;
+  const reflection = (tone<=4)
+    ? "What is the simplest next step that matches your intention?"
+    : (tone<=8)
+      ? "Where can you align your actions with what feels true?"
+      : "What can you complete or release to move forward lighter?";
 
-  const reflection = (tone <= 4)
-    ? "What’s the simplest next step that matches your intention?"
-    : (tone <= 8)
-      ? "Where can I align my actions with what feels true?"
-      : "What can I complete or release to move forward lighter?";
-
-  const practice = `${t.advice} ${s.advice}`;
+  const practice = `${t.msg} ${s.msg}`;
 
   document.getElementById("daily").innerHTML = `
     <div class="big">Daily Message</div>
@@ -214,8 +157,7 @@ function calc(){
       <span class="smallmono">Tone:</span> ${tone} — ${t.name}<br>
       <span class="smallmono">Day sign:</span> ${sign}<br><br>
 
-      <span class="smallmono">Theme:</span> ${theme}<br>
-      <span class="smallmono">Meaning:</span> ${interpretation}<br><br>
+      <span class="smallmono">Meaning:</span> ${meaning}<br><br>
 
       <span class="smallmono">Reflection:</span> ${reflection}<br>
       <span class="smallmono">Practice:</span> ${practice}
@@ -224,7 +166,7 @@ function calc(){
 }
 
 function today(){
-  let now=new Date();
+  const now=new Date();
   document.getElementById("date").value = now.toISOString().split("T")[0];
   calc();
 }
