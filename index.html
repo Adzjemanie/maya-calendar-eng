@@ -14,32 +14,18 @@
   <style>
     
     :root{
-      --bg:#0b1220;
-      --card:#111a2e;
-      --border:#243457;
-      --panel:#0f1a33;
-      --panelBorder:#2c3f6b;
-      --text:#e6ecff;
-      --muted:#9fb0d9;
-      --hint:#7f93c9;
-      --accent:#7ea2ff;
-      --explain:#dbe4ff;
+      --bg:#0b0e14;
+      --card:#121a2b;
+      --border:#223155;
+      --panel:#0f1830;
+      --panelBorder:#2a3c66;
+      --text:#e7eeff;
+      --muted:#b1c2ea;
+      --hint:#8ea4d8;
+      --accent:#87a7ff;
+      --explain:#d9e4ff;
       --shadow:rgba(0,0,0,.35);
     }
-    @media (prefers-color-scheme: light){
-      :root{
-        --bg:#f5f7fb;
-        --card:#ffffff;
-        --border:#d9e2f2;
-        --panel:#f3f6fd;
-        --panelBorder:#d7e2f6;
-        --text:#0b1220;
-        --muted:#34445f;
-        --hint:#4a5b78;
-        --accent:#1b2a5a;
-        --explain:#0b1220;
-        --shadow:rgba(16,24,40,.10);
-      }
     }
 
     :root{font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;}
@@ -76,9 +62,9 @@
     .v { font-size: 14px; }
 
     .hint { font-size: 12px; color: var(--hint); margin-top: 10px; line-height: 1.35; }
-    .pill { display:inline-block; padding: 4px 10px; border:1px solid #27344d; border-radius: 999px; background: color-mix(in oklab, var(--panel) 72%, var(--bg)); color:#b9c2d3; font-size: 12px; }
+    .pill { display:inline-block; padding: 4px 10px; border:1px solid #27344d; border-radius: 999px; background: #0b1020; color:#b9c2d3; font-size: 12px; }
 
-    details { margin-top: 12px; border: 1px solid var(--panelBorder); border-radius: 12px; padding: 10px 12px; background: color-mix(in oklab, var(--panel) 72%, var(--bg)); }
+    details { margin-top: 12px; border: 1px solid var(--panelBorder); border-radius: 12px; padding: 10px 12px; background: #0b1020; }
     summary { cursor: pointer; font-size: 13px; color: var(--accent); user-select: none; }
     summary::-webkit-details-marker { display:none; }
 
@@ -92,7 +78,7 @@
       width:28px;height:28px;border-radius:10px;
       display:inline-flex;align-items:center;justify-content:center;
       border:1px solid var(--panelBorder);
-      background: color-mix(in oklab, var(--panel) 78%, var(--bg));
+      background: #0b1020;
       font-weight:700; font-size:12px; letter-spacing:.5px;
       color: var(--accent);
     }
