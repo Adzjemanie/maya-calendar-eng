@@ -1,325 +1,179 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Maya Calendar — Daily Oracle</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Maya Calendar</title>
 
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Maya Calendar">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#0b0e14">
+<style>
+body{
+font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+background:#0b0e14;
+color:#e7eeff;
+margin:0;
+padding:20px;
+}
 
-  <style>
-    :root{
-      --bg:#0b0e14;
-      --card:#121a2b;
-      --border:#223155;
-      --panel:#0f1830;
-      --panelBorder:#2a3c66;
-      --text:#e7eeff;
-      --muted:#b1c2ea;
-      --hint:#8ea4d8;
-      --accent:#87a7ff;
-      --explain:#d9e4ff;
-      --shadow:rgba(0,0,0,.35);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
+.container{max-width:900px;margin:auto;}
 
-    body{ margin:0; background:var(--bg); color:var(--text);}
-    .wrap{
-      max-width: 980px; margin:0 auto;
-      padding: 24px;
-      padding-top: calc(24px + env(safe-area-inset-top));
-      padding-bottom: calc(24px + env(safe-area-inset-bottom));
-    }
-    .card{
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 18px;
-      box-shadow: 0 10px 30px var(--shadow);
-    }
+.card{
+background:#121a2b;
+border:1px solid #223155;
+border-radius:16px;
+padding:20px;
+margin-bottom:20px;
+}
 
-    h1{ font-size: 22px; margin:0 0 8px; }
-    p{ margin: 8px 0; color: var(--muted); line-height: 1.5; }
+.big{font-size:22px;font-weight:600;margin-bottom:10px;}
 
-    label{ display:block; font-size:12px; color:var(--muted); margin-bottom:6px; }
-    input, select, button{
-      width:100%; box-sizing:border-box;
-      border-radius:12px; border:1px solid var(--panelBorder);
-      background: var(--panel); color: var(--text);
-      padding: 10px 12px; font-size: 16px;
-    }
-    button{ cursor:pointer; background:#152449; border-color: var(--panelBorder); }
-    button:hover{ filter: brightness(1.08); }
+.tone-body{
+margin-top:12px;
+line-height:1.7;
+color:#d9e4ff;
+}
 
-    .row{ display:grid; grid-template-columns: 1fr; gap: 10px; }
-    @media (min-width:520px){ .row{ grid-template-columns: 1fr 1fr; } }
+.smallmono{
+font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+color:#b1c2ea;
+}
 
-    .out{
-      margin-top:14px; padding:14px;
-      border-radius:14px; background: var(--panel);
-      border: 1px solid var(--panelBorder);
-    }
-    .big{ font-size:18px; font-weight:650; letter-spacing:.2px; }
-    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
-    .hint{ font-size:12px; color: var(--hint); margin-top:10px; line-height:1.35; }
+input,button{
+font-size:16px;
+padding:10px;
+border-radius:10px;
+border:1px solid #2a3c66;
+background:#0f1830;
+color:white;
+}
 
-    .pill{ display:inline-block; padding:4px 10px; border:1px solid var(--panelBorder); border-radius:999px; background:#0b1020; color:var(--muted); font-size:12px; }
+button{cursor:pointer;margin-left:8px;}
 
-    .kv{ display:grid; grid-template-columns: 140px 1fr; gap: 10px; margin-top: 10px; align-items:start; }
-    .k{ color: var(--muted); font-size:12px; padding-top: 3px; }
-    .v{ font-size:14px; }
-
-    details{ margin-top:12px; border:1px solid var(--panelBorder); border-radius:12px; padding:10px 12px; background:#0b1020; }
-    summary{ cursor:pointer; font-size:13px; color: var(--accent); user-select:none; }
-    summary::-webkit-details-marker{ display:none; }
-
-    .tone-title{ margin-top:10px; font-size:13px; color: var(--accent); }
-    .tone-body{ margin-top: 12px; color: var(--explain); font-size: 16px; line-height: 1.85; max-width: 44rem; letter-spacing: 0.15px; }
-    .tone-bullets{ margin: 12px 0 0 22px; color: var(--explain); font-size:16px; line-height:1.85; max-width:44rem; }
-    .tone-bullets li{ margin: 6px 0; }
-    .smallmono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 12px; color: var(--muted);}
-
-    .dayline{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-    .glyph{
-      width:28px; height:28px; border-radius:10px;
-      display:inline-flex; align-items:center; justify-content:center;
-      border:1px solid var(--panelBorder);
-      background:#0b1020;
-      font-weight:700; font-size:12px; letter-spacing:.5px;
-      color: var(--accent);
-    }
-
-    /* Mobile polish */
-    @media (max-width: 640px) {
-      .wrap{ padding:16px; padding-top: calc(16px + env(safe-area-inset-top)); padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
-      .kv{ display:block; }
-      .k{ margin-top: 12px; }
-      .v{ margin-top: 6px; }
-      .out{ padding:12px; }
-      details{ padding:12px; }
-    }
-  </style>
-
-  <script id="tzData" type="application/json">{"tones": {"1": {"name": "Magnetic", "blurb": "Beginnings and intention. Sets direction and attracts focus.", "keywords": "intention • beginning"}, "2": {"name": "Lunar", "blurb": "Duality and challenge. Reveals tension and choices.", "keywords": "choice • balance"}, "3": {"name": "Electric", "blurb": "Activation and movement. Momentum through first action.", "keywords": "movement • action"}, "4": {"name": "Self-Existing", "blurb": "Structure and definition. Creates form and boundaries.", "keywords": "structure • clarity"}, "5": {"name": "Overtone", "blurb": "Empowerment and focus. Gathers energy and resources.", "keywords": "power • focus"}, "6": {"name": "Rhythmic", "blurb": "Balance and flow. Organizes energy into rhythm.", "keywords": "balance • flow"}, "7": {"name": "Resonant", "blurb": "Attunement and listening. Aligns with inner guidance.", "keywords": "attunement • insight"}, "8": {"name": "Galactic", "blurb": "Integrity and harmony. Aligns actions with values.", "keywords": "integrity • harmony"}, "9": {"name": "Solar", "blurb": "Deepening and perseverance. Commitment and long view.", "keywords": "depth • dedication"}, "10": {"name": "Planetary", "blurb": "Manifestation and realization. Makes it tangible.", "keywords": "manifestation • delivery"}, "11": {"name": "Spectral", "blurb": "Release and liberation. Clears what no longer serves.", "keywords": "release • clearing"}, "12": {"name": "Crystal", "blurb": "Cooperation and sharing. Wisdom through connection.", "keywords": "sharing • community"}, "13": {"name": "Cosmic", "blurb": "Completion and integration. Harvests the lesson.", "keywords": "completion • integration"}}, "days": {"Imix": {"blurb": "Primordial beginnings, nourishment, creative potential.", "keywords": "beginnings • nourishment"}, "Ik’": {"blurb": "Breath, spirit, communication, clearing the air.", "keywords": "breath • communication"}, "Ak’b’al": {"blurb": "Night, dreams, inner world, subtle guidance.", "keywords": "dream • inner world"}, "K’an": {"blurb": "Seed, growth, value, abundance and potential.", "keywords": "seed • growth"}, "Chikchan": {"blurb": "Life force, instinct, vitality, embodied truth.", "keywords": "life force • instinct"}, "Kimi": {"blurb": "Transformation, endings, renewal, clean closure.", "keywords": "transformation • release"}, "Manik’": {"blurb": "Healing, skill, the sacred hand, steady practice.", "keywords": "healing • skill"}, "Lamat": {"blurb": "Beauty, harmony, abundance, what you focus grows.", "keywords": "beauty • abundance"}, "Muluk": {"blurb": "Water, emotion, flow, cleansing and offering.", "keywords": "emotion • flow"}, "Ok": {"blurb": "Loyalty, companionship, heart, loving action.", "keywords": "loyalty • heart"}, "Chuwen": {"blurb": "Play, creativity, artistry, experimentation.", "keywords": "play • creativity"}, "Eb’": {"blurb": "The human path, wellbeing, development step by step.", "keywords": "path • wellbeing"}, "B’en": {"blurb": "Leadership, dignity, boundaries, upright growth.", "keywords": "leadership • boundaries"}, "Ix": {"blurb": "Earth wisdom, intuition, mystery, quiet power.", "keywords": "intuition • earth"}, "Men": {"blurb": "Vision, insight, higher perspective, strategy.", "keywords": "vision • perspective"}, "K’ib’": {"blurb": "Forgiveness, reflection, purification, inner fire.", "keywords": "forgiveness • reflection"}, "Kaban": {"blurb": "Earth movement, evolution, timing, learning.", "keywords": "evolution • timing"}, "Etz’nab’": {"blurb": "Truth, mirror, clarity, clean decisions.", "keywords": "truth • clarity"}, "Kawak": {"blurb": "Storm, cleansing, renewal, breakthrough energy.", "keywords": "cleansing • renewal"}, "Ajaw": {"blurb": "Sun, illumination, awareness, completion.", "keywords": "illumination • awareness"}}}</script>
+.row{margin-bottom:15px;}
+</style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="card">
-      <h1>Maya Calendar</h1>
-      <p>The Maya calendar tracks time through interlocking cycles such as the <b>Tzolk’in</b> (260‑day cycle), the <b>Haab’</b> (365‑day cycle), and the <b>Long Count</b>.</p>
+<div class="container">
 
-      <div class="row" style="margin-top:14px;">
-        <div>
-          <label for="date">Date</label>
-          <input id="date" type="date" />
-        </div>
-        <div>
-          <label for="corr">Correlation (JDN base)</label>
-          <select id="corr">
-            <option value="584283">GMT (584283)</option>
-            <option value="584285">584285</option>
-          </select>
-        </div>
-      </div>
+<div class="card">
+<div class="big">Maya Calendar</div>
 
-      <div class="row" style="margin-top:10px;">
-        <div>
-          <label>&nbsp;</label>
-          <button id="calc">Calculate</button>
-        </div>
-        <div>
-          <label>&nbsp;</label>
-          <button id="today">Today</button>
-        </div>
-      </div>
+<div class="row">
+<input type="date" id="date">
+<button onclick="calc()">Calculate</button>
+<button onclick="today()">Today</button>
+</div>
 
-      <div class="out" id="daily" aria-live="polite">
-        <div class="big">Daily Message</div>
-        <div id="dailyMessage" class="tone-body" style="margin-top:10px;"></div>
-      </div>
+<div id="daily" class="tone-body"></div>
 
-      <div class="out" id="out" aria-live="polite">
-        <div class="big">—</div>
-        <div class="hint">Pick a date and click <span class="pill">Calculate</span>.</div>
-      </div>
+</div>
 
-      <details>
-        <summary>How to read the Tzolk’in?</summary>
-        <div class="tone-body">
-          The Tzolk’in combines two cycles: a <b>tone</b> (1–13) and a <b>day sign</b> (20).<br>
-          Read it as: <span class="smallmono">tone = how</span> (movement/rhythm) and <span class="smallmono">day sign = what</span> (theme/quality).
-          Together they create a unique 260‑day cycle.
-        </div>
-      </details>
 
-      <details>
-        <summary>Reference: the 13 Tones</summary>
-        <div class="tone-body" id="tonesList"></div>
-      </details>
+<div class="card">
+<div class="big">Maya Time Cycles</div>
 
-      <details>
-        <summary>Reference: the 20 Day Signs</summary>
-        <div class="tone-body" id="daysList"></div>
-      </details>
-    </div>
-  </div>
+<div class="tone-body">
+<b>Tzolk’in (260 days)</b><br>
+The Tzolk’in is a sacred cycle of 260 days. Each day combines a
+<span class="smallmono">tone (1–13)</span> and a
+<span class="smallmono">day sign (20)</span>.
+Together they create 260 unique day combinations.
+</div>
+
+<div class="tone-body">
+<b>Haab’ (365 days)</b><br>
+The Haab’ is the Maya solar calendar of 365 days.
+It consists of 18 months of 20 days plus 5 additional days called
+<span class="smallmono">Wayeb’</span>, a transitional period between years.
+</div>
+
+<div class="tone-body">
+<b>Long Count</b><br>
+The Long Count records the number of days since the Maya creation date.
+Dates are written as:
+<span class="smallmono">baktun.katun.tun.uinal.kin</span>.
+</div>
+
+<div class="tone-body">
+<b>Katun</b><br>
+A katun is a period of <span class="smallmono">7,200 days</span>
+(about 20 years). Katuns are named after the Tzolk’in day
+<span class="smallmono">Ajaw</span> on which the katun ends.
+</div>
+
+<div class="tone-body">
+<b>Baktun</b><br>
+A baktun consists of <span class="smallmono">20 katun</span>
+(144,000 days), which is about 394 years.
+</div>
+
+</div>
+
+</div>
 
 <script>
-(() => {
-  const DATA = JSON.parse(document.getElementById('tzData').textContent);
-  const TONES = DATA.tones;
-  const DAYS  = DATA.days;
 
-  const TZOLKIN_NAMES = [
-    "Imix","Ik’","Ak’b’al","K’an","Chikchan","Kimi","Manik’","Lamat","Muluk","Ok",
-    "Chuwen","Eb’","B’en","Ix","Men","K’ib’","Kaban","Etz’nab’","Kawak","Ajaw"
-  ];
+const daySigns=[
+"Imix","Ik’","Ak’b’al","K’an","Chikchan","Kimi","Manik’","Lamat","Muluk","Ok",
+"Chuwen","Eb’","B’en","Ix","Men","K’ib’","Kaban","Etz’nab’","Kawak","Ajaw"
+];
 
-  const HAAB_MONTHS = [
-    "Pop","Wo’","Sip","Sotz’","Sek","Xul","Yaxk’in","Mol","Ch’en","Yax",
-    "Sak’","Keh","Mak","K’ank'in","Muwan","Pax","K’ayab","Kumk’u","Wayeb’"
-  ];
+function gregorianToJDN(y,m,d){
+let a=Math.floor((14-m)/12);
+let y2=y+4800-a;
+let m2=m+12*a-3;
+return d+Math.floor((153*m2+2)/5)+365*y2+Math.floor(y2/4)-Math.floor(y2/100)+Math.floor(y2/400)-32045;
+}
 
-  const pad2 = n => String(n).padStart(2, "0");
+function calc(){
 
-  function gregorianToJDN(y, m, d) {
-    const a = Math.floor((14 - m) / 12);
-    const y2 = y + 4800 - a;
-    const m2 = m + 12 * a - 3;
-    return d + Math.floor((153 * m2 + 2) / 5) + 365 * y2 + Math.floor(y2 / 4)
-      - Math.floor(y2 / 100) + Math.floor(y2 / 400) - 32045;
-  }
+let iso=document.getElementById("date").value;
+if(!iso)return;
 
-  function longCountFromDays(days) {
-    const BAKTUN = 144000, KATUN = 7200, TUN = 360, UINAL = 20;
-    const baktun = Math.floor(days / BAKTUN); days %= BAKTUN;
-    const katun  = Math.floor(days / KATUN);  days %= KATUN;
-    const tun    = Math.floor(days / TUN);    days %= TUN;
-    const uinal  = Math.floor(days / UINAL);  days %= UINAL;
-    const kin    = days;
-    return { baktun, katun, tun, uinal, kin };
-  }
+let parts=iso.split("-");
+let y=parseInt(parts[0]);
+let m=parseInt(parts[1]);
+let d=parseInt(parts[2]);
 
-  function tzolkinFromDays(days) {
-    const number = ((days + 3) % 13) + 1;
-    const name = TZOLKIN_NAMES[(days + 19) % 20];
-    return { number, name };
-  }
+let jdn=gregorianToJDN(y,m,d);
 
-  function haabFromDays(days) {
-    const haabIndex = (days + 348) % 365;
-    if (haabIndex >= 360) return { day: haabIndex - 360, month: "Wayeb’" };
-    const monthIndex = Math.floor(haabIndex / 20);
-    return { day: haabIndex % 20, month: HAAB_MONTHS[monthIndex] };
-  }
+let correlation=584283;
 
-  function modPositive(n, m) { return ((n % m) + m) % m; }
+let days=jdn-correlation;
 
-  function computeForDate(dateISO, correlation) {
-    const [yy, mm, dd] = dateISO.split("-").map(Number);
-    const jdn = gregorianToJDN(yy, mm, dd);
-    const daysSinceBase = jdn - correlation;
-    const daysLC = modPositive(daysSinceBase, 1872000 * 20);
-    return {
-      jdn, daysSinceBase,
-      lc: longCountFromDays(daysLC),
-      tz: tzolkinFromDays(modPositive(daysSinceBase, 260)),
-      hb: haabFromDays(modPositive(daysSinceBase, 365))
-    };
-  }
+let tone=((days+3)%13)+1;
+let sign=daySigns[(days+19)%20];
 
-  function escapeHtml(s) {
-    return String(s)
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
+let message=`
+<div class="big">Daily Message</div>
 
-  // UI
-  const elDate = document.getElementById("date");
-  const elCorr = document.getElementById("corr");
-  const elOut  = document.getElementById("out");
-  const dailyEl = document.getElementById("dailyMessage");
-  const btnCalc = document.getElementById("calc");
-  const btnToday = document.getElementById("today");
+<div class="tone-body">
+<b>${tone} ${sign}</b><br><br>
 
-  function setToday() {
-    const now = new Date();
-    elDate.value = `${now.getFullYear()}-${pad2(now.getMonth()+1)}-${pad2(now.getDate())}`;
-  }
+<span class="smallmono">Tone:</span> ${tone}<br>
+<span class="smallmono">Day Sign:</span> ${sign}<br><br>
 
-  function renderReference() {
-    const tonesList = Object.keys(TONES).map(k => {
-      const t = TONES[k];
-      return `<div style="margin:10px 0;"><b>${k} — ${escapeHtml(t.name)}</b><br><span class="smallmono">${escapeHtml(t.keywords)}</span><br>${escapeHtml(t.blurb)}</div>`;
-    }).join("");
-    document.getElementById("tonesList").innerHTML = tonesList;
+This day combines the movement of tone <b>${tone}</b> with the qualities of <b>${sign}</b>.
+Use this as a moment to reflect on how the energy of the day may guide your actions.
+</div>
+`;
 
-    const daysList = TZOLKIN_NAMES.map(name => {
-      const d = DAYS[name];
-      return `<div style="margin:10px 0;"><b>${escapeHtml(name)}</b><br><span class="smallmono">${escapeHtml(d.keywords)}</span><br>${escapeHtml(d.blurb)}</div>`;
-    }).join("");
-    document.getElementById("daysList").innerHTML = daysList;
-  }
+document.getElementById("daily").innerHTML=message;
 
-  function render() {
-    const iso = elDate.value;
-    if (!iso) return;
-    const correlation = Number(elCorr.value);
+}
 
-    const r = computeForDate(iso, correlation);
-    const lcStr = `${r.lc.baktun}.${r.lc.katun}.${r.lc.tun}.${r.lc.uinal}.${r.lc.kin}`;
-    const tzStr = `${r.tz.number} ${r.tz.name}`;
-    const hbStr = `${r.hb.day} ${r.hb.month}`;
+function today(){
 
-    // Daily message (tone + day sign)
-    const tone = TONES[r.tz.number];
-    const day  = DAYS[r.tz.name];
-    const theme = `${tone.keywords} • ${day.keywords}`;
-    const interpretation = `A day for <b>${tone.keywords.split(' • ')[0]}</b> expressed through <b>${day.keywords.split(' • ')[0]}</b>.`;
+let now=new Date();
+let iso=now.toISOString().split("T")[0];
+document.getElementById("date").value=iso;
+calc();
 
-    dailyEl.innerHTML = `
-      <div class="tone-title"><b>${escapeHtml(tzStr)}</b></div>
-      <div class="tone-body"><span class="smallmono">Theme:</span> ${escapeHtml(theme)}</div>
-      <div class="tone-body">${interpretation}</div>
-      <div class="tone-body"><b>Tone</b>: ${escapeHtml(tone.blurb)}</div>
-      <div class="tone-body"><b>Day sign</b>: ${escapeHtml(day.blurb)}</div>
-    `;
+}
 
-    elOut.innerHTML = `
-      <div class="big mono">${lcStr}</div>
+today();
 
-      <div class="kv">
-        <div class="k">Tzolk’in</div>
-        <div class="v mono">
-          <span class="dayline">
-            <span class="glyph">${r.tz.name.replace(/[^A-Za-z]/g,"").slice(0,2).toUpperCase()}</span>
-            <span>${tzStr}</span>
-          </span>
-        </div>
-
-        <div class="k">Haab’</div><div class="v mono">${hbStr}</div>
-      </div>
-
-      <div class="hint">
-        Quick read: <span class="smallmono">tone</span> = how the day moves • <span class="smallmono">day sign</span> = what the day is about.
-      </div>
-    `;
-  }
-
-  btnCalc.addEventListener("click", render);
-  btnToday.addEventListener("click", () => { setToday(); render(); });
-  elCorr.addEventListener("change", render);
-
-  renderReference();
-  setToday();   // 🌙 auto Today on open
-  render();
-})();
 </script>
+
 </body>
 </html>
