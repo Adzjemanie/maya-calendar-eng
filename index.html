@@ -20,21 +20,21 @@
     }
     body{background:var(--bg);color:var(--text);margin:0;padding:16px;}
     .container{max-width:900px;margin:auto;}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:16px;}
-    .big{font-size:22px;font-weight:650;margin:0 0 10px;}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px;}
+    .big{font-size:18px;font-weight:650;margin:0 0 8px;}
     label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;}
-    input,button{width:100%;box-sizing:border-box;font-size:16px;padding:10px 12px;border-radius:12px;border:1px solid var(--panelBorder);background:var(--panel);color:var(--text);}
+    input,button{width:100%;box-sizing:border-box;font-size:16px;padding:8px 10px;border-radius:12px;border:1px solid var(--panelBorder);background:var(--panel);color:var(--text);}
     button{cursor:pointer;}
     button:hover{filter:brightness(1.08);}
     .btnRow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
-    @media (max-width:640px){ .btnRow{grid-template-columns:1fr;} }
-    .out{margin-top:14px;padding:14px;border-radius:14px;background:var(--panel);border:1px solid var(--panelBorder);}
+    @media (max-width:640px){body{padding:12px;} .card{padding:14px;} .out{padding:10px 10px;} } }
+    .out{margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--panel);border:1px solid var(--panelBorder);}
     .tone-body{margin-top:12px;line-height:1.75;color:var(--explain);font-size:16px;max-width:44rem;}
     .smallmono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);font-size:12px;}
     details{margin-top:12px;border:1px solid var(--panelBorder);border-radius:12px;padding:10px 12px;background:#0b1020;}
     summary{cursor:pointer;color:var(--accent);font-size:13px;user-select:none;}
     summary::-webkit-details-marker{display:none;}
-    .hint{font-size:12px;color:var(--hint);margin-top:10px;line-height:1.35;}
+    .hint{font-size:12px;color:var(--hint);margin-top:8px;line-height:1.35;}
   </style>
 </head>
 <body>
